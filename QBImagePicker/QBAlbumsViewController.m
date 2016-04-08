@@ -59,16 +59,22 @@ static CGSize CGSizeScale(CGSize size, CGFloat scale) {
     [super viewWillAppear:animated];
     
     // Configure navigation item
-    self.navigationItem.title = NSLocalizedStringFromTableInBundle(@"albums.title", @"QBImagePicker", self.imagePickerController.assetBundle, nil);
-    self.navigationItem.prompt = self.imagePickerController.prompt;
+    self.imagePickerController.navigationItem.title = NSLocalizedStringFromTableInBundle(@"albums.title", @"QBImagePicker", self.imagePickerController.assetBundle, nil);
+    self.imagePickerController.navigationItem.prompt = self.imagePickerController.prompt;
     
     // Show/hide 'Done' button
     if (self.imagePickerController.allowsMultipleSelection) {
-        [self.navigationItem setRightBarButtonItem:self.doneButton animated:NO];
+        [self.imagePickerController.navigationItem setRightBarButtonItem:self.doneButton animated:NO];
     } else {
-        [self.navigationItem setRightBarButtonItem:nil animated:NO];
+        [self.imagePickerController.navigationItem setRightBarButtonItem:nil animated:NO];
     }
-    
+	
+	// Show 'Cancel' button
+	UIBarButtonItem *cancelButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel
+																				  target:self
+																				  action:@selector(cancel:)];
+	[self.imagePickerController.navigationItem setLeftBarButtonItem:cancelButton];
+	
     [self updateControlState];
     [self updateSelectionInfo];
 }
@@ -158,6 +164,12 @@ static CGSize CGSizeScale(CGSize size, CGFloat scale) {
     
     for (PHFetchResult *fetchResult in self.fetchResults) {
         [fetchResult enumerateObjectsUsingBlock:^(PHAssetCollection *assetCollection, NSUInteger index, BOOL *stop) {
+			
+			// We are implementing this check so that empty albums won't be accidentally showed in the list.
+			if ([PHAsset fetchAssetsInAssetCollection:assetCollection options:nil].count == 0) {
+				return;
+			}
+			
             PHAssetCollectionSubtype subtype = assetCollection.assetCollectionSubtype;
             
             if (subtype == PHAssetCollectionSubtypeAlbumRegular) {

@@ -14,7 +14,7 @@
 
 @interface QBImagePickerController ()
 
-@property (nonatomic, strong) UINavigationController *albumsNavigationController;
+@property (nonatomic, weak) QBAlbumsViewController *albumsVC;
 
 @property (nonatomic, strong) NSBundle *assetBundle;
 
@@ -47,31 +47,33 @@
         if (bundlePath) {
             self.assetBundle = [NSBundle bundleWithPath:bundlePath];
         }
-        
-        [self setUpAlbumsViewController];
-        
-        // Set instance
-        QBAlbumsViewController *albumsViewController = (QBAlbumsViewController *)self.albumsNavigationController.topViewController;
-        albumsViewController.imagePickerController = self;
     }
     
     return self;
+}
+
+- (void)viewDidLoad
+{
+	[super viewDidLoad];
+	
+	[self setUpAlbumsViewController];
 }
 
 - (void)setUpAlbumsViewController
 {
     // Add QBAlbumsViewController as a child
     UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"QBImagePicker" bundle:self.assetBundle];
-    UINavigationController *navigationController = [storyboard instantiateViewControllerWithIdentifier:@"QBAlbumsNavigationController"];
-    
-    [self addChildViewController:navigationController];
-    
-    navigationController.view.frame = self.view.bounds;
-    [self.view addSubview:navigationController.view];
-    
-    [navigationController didMoveToParentViewController:self];
-    
-    self.albumsNavigationController = navigationController;
+	self.albumsVC = [storyboard instantiateViewControllerWithIdentifier:@"QBAlbumsViewController"];
+	QBAlbumsViewController *albumsVC = self.albumsVC;
+	
+	albumsVC.imagePickerController = self;
+	
+	[self addChildViewController:albumsVC];
+	
+	albumsVC.view.frame = self.view.bounds;
+	[self.view addSubview:albumsVC.view];
+	
+	[albumsVC didMoveToParentViewController:self];
 }
 
 @end
