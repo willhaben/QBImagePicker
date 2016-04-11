@@ -109,6 +109,8 @@ static CGSize CGSizeScale(CGSize size, CGFloat scale) {
 		[self.collectionView layoutIfNeeded];
         [self.collectionView scrollToItemAtIndexPath:indexPath atScrollPosition:UICollectionViewScrollPositionTop animated:NO];
     }
+	
+	[self.collectionViewLayout invalidateLayout];
 }
 
 - (void)viewWillDisappear:(BOOL)animated
