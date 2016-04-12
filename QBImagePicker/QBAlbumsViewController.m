@@ -64,6 +64,7 @@ static CGSize CGSizeScale(CGSize size, CGFloat scale) {
     
     // Show/hide 'Done' button
     if (self.imagePickerController.allowsMultipleSelection) {
+		self.doneButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(done:)];
         [self.imagePickerController.navigationItem setRightBarButtonItem:self.doneButton animated:NO];
     } else {
         [self.imagePickerController.navigationItem setRightBarButtonItem:nil animated:NO];
