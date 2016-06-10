@@ -656,8 +656,8 @@ static CGSize CGSizeScale(CGSize size, CGFloat scale) {
     }
     
     CGFloat width = (CGRectGetWidth(self.view.frame) - 2.0 * (numberOfColumns - 1)) / numberOfColumns;
-    
-    return CGSizeMake(width, width);
+
+	return CGSizeMake(MAX(0, width), MAX(0, width)); // May fix the crash `negative sizes are not supported in the flow layout`
 }
 
 @end
