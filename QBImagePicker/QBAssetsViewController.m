@@ -520,8 +520,8 @@ static CGSize CGSizeScale(CGSize size, CGFloat scale) {
                 } else {
                     format = NSLocalizedStringFromTableInBundle(@"assets.footer.photos-and-videos", @"QBImagePicker", bundle, nil);
                 }
-                
-                label.text = [NSString stringWithFormat:format, numberOfPhotos, numberOfVideos];
+				
+				label.text = format ? [NSString stringWithFormat:format, numberOfPhotos, numberOfVideos] : @"";
             }
                 break;
                 
@@ -529,8 +529,8 @@ static CGSize CGSizeScale(CGSize size, CGFloat scale) {
             {
                 NSString *key = (numberOfPhotos == 1) ? @"assets.footer.photo" : @"assets.footer.photos";
                 NSString *format = NSLocalizedStringFromTableInBundle(key, @"QBImagePicker", bundle, nil);
-                
-                label.text = [NSString stringWithFormat:format, numberOfPhotos];
+				
+				label.text = format ? [NSString stringWithFormat:format, numberOfPhotos] : @"";
             }
                 break;
                 
@@ -539,7 +539,7 @@ static CGSize CGSizeScale(CGSize size, CGFloat scale) {
                 NSString *key = (numberOfVideos == 1) ? @"assets.footer.video" : @"assets.footer.videos";
                 NSString *format = NSLocalizedStringFromTableInBundle(key, @"QBImagePicker", bundle, nil);
                 
-                label.text = [NSString stringWithFormat:format, numberOfVideos];
+				label.text =  format ? [NSString stringWithFormat:format, numberOfVideos] : @"";
             }
                 break;
         }
