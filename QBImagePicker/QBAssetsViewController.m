@@ -410,8 +410,13 @@ static CGSize CGSizeScale(CGSize size, CGFloat scale) {
                     
                     NSIndexSet *changedIndexes = [collectionChanges changedIndexes];
                     if ([changedIndexes count]) {
-                        [self.collectionView reloadItemsAtIndexPaths:[changedIndexes qb_indexPathsFromIndexesWithSection:0]];
-                    }
+						// https://github.com/questbeat/QBImagePicker/pull/180
+						// We need to remove the removed images, since reloading them will cause a crash
+						// "uncaught ObjC exception, reason: attempt to delete and reload the same index path"
+						NSMutableIndexSet *changedWithoutRemovalsIndexes = [changedIndexes mutableCopy];
+						[changedWithoutRemovalsIndexes removeIndexes:removedIndexes];
+						[self.collectionView reloadItemsAtIndexPaths:[changedWithoutRemovalsIndexes qb_indexPathsFromIndexesWithSection:0]];
+					}
                 } completion:NULL];
             }
             
